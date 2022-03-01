@@ -115,7 +115,7 @@ func m() int {
 
 	//run installer
 	if runtime.GOOS == "windows" {
-		cmd := exec.Command("mini_installer_" + r.String() + ".exe")
+		cmd := exec.Command("mini_installer_" + vs + ".exe")
 		err = cmd.Run()
 		if err != nil {
 			_, _ = fmt.Fprintln(os.Stderr, "Error running installer:", err)
