@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"flag"
 	"fmt"
 	"github.com/buger/jsonparser"
 	"io"
@@ -18,6 +19,8 @@ func main() {
 }
 
 func m() int {
+	norun := flag.Bool("norun", false, "Don't execute installer after downloading it")
+	flag.Parse()
 	//get LAST_CHANGE metadata
 	resp, err := http.Get(baseUrl + "LAST_CHANGE")
 	if err != nil {
@@ -114,20 +117,21 @@ func m() int {
 	fmt.Println("done")
 
 	//run installer
-	if runtime.GOOS == "windows" {
-		cmd := exec.Command("mini_installer_" + vs + ".exe")
-		err = cmd.Run()
-		if err != nil {
-			_, _ = fmt.Fprintln(os.Stderr, "Error running installer:", err)
-			return 1
-		}
-		err = cmd.Wait()
-		if err != nil {
-			_, _ = fmt.Fprintln(os.Stderr, "Error waiting for installer to finish executing:", err)
-			return 1
+	if !*norun {
+		if runtime.GOOS == "windows" {
+			cmd := exec.Command("mini_installer_" + vs + ".exe")
+			fmt.Print("Running installer...")
+			err = cmd.Run()
+			if err != nil {
+				_, _ = fmt.Fprintln(os.Stderr, "Error running installer:", err)
+				return 1
+			}
+			fmt.Println("done")
+		} else {
+			fmt.Println("non-windows os, not running installer.")
 		}
 	} else {
-		fmt.Println("non-windows os, not running installer.")
+		fmt.Println("norun set, not executing installer.")
 	}
 
 	return 0

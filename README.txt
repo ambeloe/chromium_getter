@@ -1,3 +1,6 @@
-no arguments as of now; only downloads the windows 64 bit chromium
+downloads the latest version of chromium for win x64
+
+arguments:
+	norun: if present, the installer isnt run after downloading
 
 outputs installer to {current dir}/mini_installer_{LAST_CHANGE}.exe
